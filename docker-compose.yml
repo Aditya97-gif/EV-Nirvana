@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgis/postgis:15-3.4
+    container_name: ev_infra_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-evuser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-ev_infra}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-evuser} -d ${DB_NAME:-ev_infra}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: ev_infra_api
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      PYTHONPATH: /app:/project
+      PROJECT_ROOT: /project
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./api:/app
+      - .:/project
+      - ./data:/project/data
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: ev_infra_web
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+
+volumes:
+  pgdata:

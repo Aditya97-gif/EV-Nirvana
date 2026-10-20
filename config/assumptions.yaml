@@ -1,0 +1,165 @@
+# Seed assumptions for meta.assumptions table.
+# data_status: analyst_assumption | derived | observed
+# All values are STARTING PLACEHOLDERS — replace with sourced values and update source/notes.
+
+assumptions:
+  - key: dedup_distance_m
+    value: 75
+    unit: metres
+    source: analyst assumption
+    notes: "Tune on labelled sample. Distance below which two charger records are clustered."
+    data_status: analyst_assumption
+
+  - key: dc_fast_min_kw
+    value: 30
+    unit: kW
+    source: analyst assumption
+    notes: "Threshold above which a charger is classified as DC fast. Verify against BEE/MoP definitions."
+    data_status: analyst_assumption
+
+  - key: coverage_radius_urban_km
+    value: 3
+    unit: km
+    source: analyst assumption
+    notes: "UNVERIFIED — check MoP public charging guidelines (CPO) 2022 or latest. Update when verified."
+    data_status: analyst_assumption
+
+  - key: coverage_radius_highway_km
+    value: 25
+    unit: km
+    source: analyst assumption
+    notes: "UNVERIFIED — check MoP/NHEV corridor guidelines. Update when verified."
+    data_status: analyst_assumption
+
+  - key: corridor_gap_threshold_km
+    value: 50
+    unit: km
+    source: analyst assumption
+    notes: "UNVERIFIED — NH DC charging spacing standard. Check MoP 2023 revised guidelines."
+    data_status: analyst_assumption
+
+  - key: public_charging_share_2w
+    value: 0.10
+    unit: fraction
+    source: analyst assumption
+    notes: "Most 2W EVs charge at home. Literature range 0.05–0.20."
+    data_status: analyst_assumption
+
+  - key: public_charging_share_3w
+    value: 0.40
+    unit: fraction
+    source: analyst assumption
+    notes: "e-Rickshaws rely more on public/commercial charging."
+    data_status: analyst_assumption
+
+  - key: public_charging_share_4w
+    value: 0.30
+    unit: fraction
+    source: analyst assumption
+    notes: "Analyst assumption. Rocky Mountain Institute / CEEW studies suggest 0.20–0.40."
+    data_status: analyst_assumption
+
+  - key: public_charging_share_bus
+    value: 0.20
+    unit: fraction
+    source: analyst assumption
+    notes: "Most e-buses use depot charging. Only intercity or public buses use public chargers."
+    data_status: analyst_assumption
+
+  - key: kwh_per_day_2w
+    value: 1.5
+    unit: kWh/vehicle/day
+    source: analyst assumption
+    notes: "~50 km/day × 30 Wh/km. Verify with ARAI/BEE data."
+    data_status: analyst_assumption
+
+  - key: kwh_per_day_3w
+    value: 6.0
+    unit: kWh/vehicle/day
+    source: analyst assumption
+    notes: "~120 km/day × 50 Wh/km. Verify with ARAI data."
+    data_status: analyst_assumption
+
+  - key: kwh_per_day_4w
+    value: 8.0
+    unit: kWh/vehicle/day
+    source: analyst assumption
+    notes: "~50 km/day × 160 Wh/km. Verify."
+    data_status: analyst_assumption
+
+  - key: kwh_per_day_bus
+    value: 150.0
+    unit: kWh/vehicle/day
+    source: analyst assumption
+    notes: "~250 km/day × 600 Wh/km for e-bus. Verify with BEST/BMTC data."
+    data_status: analyst_assumption
+
+  - key: charger_kw_ac
+    value: 7.4
+    unit: kW
+    source: analyst assumption
+    notes: "Typical single-phase AC charger. Bharat AC-001 = 3.3 kW, Type 2 = 7.4–22 kW."
+    data_status: analyst_assumption
+
+  - key: charger_kw_dc
+    value: 30.0
+    unit: kW
+    source: analyst assumption
+    notes: "Minimum DC fast charger per MoP guidelines (UNVERIFIED exact figure)."
+    data_status: analyst_assumption
+
+  - key: utilisation_target
+    value: 0.15
+    unit: fraction
+    source: analyst assumption
+    notes: "Industry average for public chargers in India 2023–24. Show sensitivity ±25%."
+    data_status: analyst_assumption
+
+  - key: operating_hours_per_day
+    value: 20
+    unit: hours
+    source: analyst assumption
+    notes: "Most public chargers operate ~20 h/day."
+    data_status: analyst_assumption
+
+  - key: charger_efficiency
+    value: 0.90
+    unit: fraction
+    source: analyst assumption
+    notes: "AC-DC conversion efficiency. Manufacturer specs typically 88–95%."
+    data_status: analyst_assumption
+
+  - key: cgi_weight_evs_per_charger
+    value: 0.30
+    unit: fraction
+    source: analyst assumption
+    notes: "Weight in Charging Gap Index formula. Adjustable in UI."
+    data_status: analyst_assumption
+
+  - key: cgi_weight_coverage
+    value: 0.25
+    unit: fraction
+    source: analyst assumption
+    notes: "Weight for 1-coverage term in CGI."
+    data_status: analyst_assumption
+
+  - key: cgi_weight_demand_score
+    value: 0.20
+    unit: fraction
+    source: analyst assumption
+    notes: "Weight for demand proxy (night lights, POIs) in CGI."
+    data_status: analyst_assumption
+
+  - key: cgi_weight_growth_rate
+    value: 0.10
+    unit: fraction
+    source: analyst assumption
+    notes: "Weight for EV growth rate in CGI."
+    data_status: analyst_assumption
+
+  - key: cgi_weight_corridor_gap
+    value: 0.15
+    unit: fraction
+    source: analyst assumption
+    notes: "Weight for corridor gap indicator in CGI."
+    data_status: analyst_assumption

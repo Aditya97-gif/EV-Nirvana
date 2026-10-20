@@ -1,0 +1,36 @@
+# Project configuration — override defaults here
+# The entire pipeline is parameterised by `state`.
+# Change `state` and rerun to target a different Indian state.
+
+state: Maharashtra          # Demo state (ISO: MH)
+state_code: MH              # Used in VAHAN / RTO codes
+
+# CRS
+geom_crs: EPSG:4326         # Storage CRS
+project_crs: EPSG:32643     # Metric CRS for distance / buffer calcs (UTM Zone 43N, covers Maharashtra)
+
+# Map defaults
+map_center_lat: 19.7515
+map_center_lon: 75.7139
+map_default_zoom: 6
+
+# API
+api_host: "0.0.0.0"
+api_port: 8000
+
+# Database (override with env vars via .env)
+db_host: db
+db_port: 5432
+db_name: ev_infra
+db_user: evuser
+db_password: "${DB_PASSWORD}"
+
+# OpenChargeMap (set key in .env)
+ocm_api_key: "${OCM_API_KEY}"
+
+# Overpass API
+overpass_url: "https://overpass-api.de/api/interpreter"
+overpass_rate_limit_s: 2
+
+# Logging
+log_level: INFO

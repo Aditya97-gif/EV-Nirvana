@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# Environment
+.env
+*.env
+
+# Data (raw data is never committed — too large; use DVC or manual transfer)
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Reports (generated)
+reports/*
+!reports/.gitkeep
+
+# Node / frontend
+web/node_modules/
+web/dist/
+web/.vite/
+
+# Docker volumes
+pgdata/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Testing
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# Notebooks (outputs can be large)
+notebooks/*.ipynb
+
+# Logs
+*.log
