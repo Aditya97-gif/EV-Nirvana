@@ -1,152 +1,176 @@
-# EV_Nirvana
+<div align="center">
 
-A data-driven web platform mapping India's EV charging infrastructure, identifying underserved regions, and generating intelligent charger placement recommendations — powered entirely by open public data.
+# ⚡ EV_Nirvana
+
+### India's Open-Source EV Charging Infrastructure Intelligence Platform
+
+*Map the gaps. Forecast demand. Optimise placement.*
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat-square&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostGIS-15--3.4-336791?style=flat-square&logo=postgresql&logoColor=white)](https://postgis.net)
+[![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=flat-square&logo=docker&logoColor=white)](https://docs.docker.com/compose)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+<br/>
+
+![EV_Nirvana Banner](https://img.shields.io/badge/Maharashtra-34%20Districts%20Analysed-ff6b35?style=for-the-badge)
+![Chargers](https://img.shields.io/badge/Chargers-1%2C840%20Mapped-39d98a?style=for-the-badge)
+![Forecasts](https://img.shields.io/badge/Forecasts-3%20Year%20Horizon-4da6ff?style=for-the-badge)
+
+</div>
 
 ---
 
-## Overview
+## 🗺️ What is EV_Nirvana?
 
-EV_Nirvana analyses the gap between EV adoption and charging availability across Maharashtra, combining geospatial data, registration records, and population metrics into an interactive dashboard. The platform produces district-level gap scores, 3-year EV demand forecasts, and optimal site recommendations using the Maximal Covering Location Problem (MCLP).
+EV_Nirvana is a **data-driven web platform** that maps India's EV charging infrastructure, identifies underserved districts, and generates intelligent site placement recommendations — powered entirely by open public data.
 
----
-
-## Features
-
-- **Interactive Map** — CARTO Dark Matter basemap with 1,900+ real EV charger locations (OSM + Open Charge Map)
-- **Charging Gap Index (CGI)** — Composite score ranking districts by infrastructure need
-- **EV Demand Forecasting** — Holt-Winters time-series model across 3 scenarios (baseline, accelerated, conservative)
-- **Corridor Gap Analysis** — Identifies National Highway segments with insufficient DC fast-charger coverage
-- **Site Optimisation** — MCLP solver recommends optimal charger locations to maximise population coverage
-- **What-If Simulator** — Adjustable weights for real-time CGI recomputation
-- **Full Data Pipeline** — Automated ingestion from OSM, OCM, and population sources into PostGIS
+It combines real charger locations (OSM + Open Charge Map), EV registration records (VAHAN), population density, and National Highway road networks into a single interactive analytics dashboard.
 
 ---
 
-## Tech Stack
+## ✨ Features
 
-| Layer | Technology |
+| Feature | Description |
 |---|---|
-| **Frontend** | React + TypeScript + MapLibre GL JS + Recharts |
-| **Backend** | FastAPI + SQLAlchemy + PostGIS |
-| **Database** | PostgreSQL 15 + PostGIS 3 |
-| **Pipeline** | Python (GeoPandas, OSMnx, statsmodels, PuLP) |
-| **Infrastructure** | Docker Compose |
-| **Map Tiles** | CARTO Dark Matter (vector) |
+| 🗺️ **Interactive Map** | CARTO Dark Matter vector basemap with 1,840+ real charger locations, clustered by zoom level |
+| 📊 **Charging Gap Index** | Composite district-level score ranking infrastructure need (CGI) |
+| 📈 **EV Demand Forecast** | Holt-Winters time-series model across 3 scenarios — baseline, accelerated, conservative |
+| 🛣️ **Corridor Gap Analysis** | Flags National Highway segments with insufficient DC fast-charger coverage |
+| 📍 **Site Optimisation** | MCLP solver recommends top 10 charger sites to maximise population coverage |
+| 🎛️ **What-If Simulator** | Adjust CGI weights interactively and recompute rankings in real-time |
+| 🔄 **Full Data Pipeline** | Automated ingestion → cleaning → dedup → analytics → validation |
 
 ---
 
-## Quick Start
+## 🖥️ Tech Stack
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    EV_Nirvana                        │
+├──────────────┬──────────────────┬───────────────────┤
+│   Frontend   │     Backend      │     Database      │
+│              │                  │                   │
+│  React 18    │  FastAPI 0.115   │  PostgreSQL 15    │
+│  TypeScript  │  SQLAlchemy      │  PostGIS 3.4      │
+│  MapLibre GL │  Uvicorn         │                   │
+│  Recharts    │  psycopg2        │                   │
+├──────────────┴──────────────────┴───────────────────┤
+│                    Data Pipeline                     │
+│   GeoPandas · OSMnx · statsmodels · PuLP · Shapely  │
+├─────────────────────────────────────────────────────┤
+│              Infrastructure: Docker Compose          │
+└─────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
-- Docker Desktop 4.x
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 4.x
 - Git
 
-### Run
+### 1 — Clone & Configure
 
 ```bash
 git clone <repo-url> EV_Nirvana
 cd EV_Nirvana
 
-# 1. Configure environment
 cp .env.example .env
-# Edit .env — set DB_PASSWORD, OCM_API_KEY, CARTO_API_KEY
-
-# 2. Start services
-docker compose up -d
-
-# 3. Run the data pipeline
-docker compose exec api python pipeline/ingest/boundaries.py
-docker compose exec api python pipeline/ingest/chargers_osm.py
-docker compose exec api python pipeline/ingest/chargers_ocm.py
-docker compose exec api python pipeline/ingest/vahan.py
-docker compose exec api python pipeline/ingest/population.py
-docker compose exec api python pipeline/ingest/roads.py
-docker compose exec api python pipeline/clean/normalise.py
-docker compose exec api python pipeline/clean/dedup.py
-docker compose exec api python pipeline/clean/rto_mapping.py
-docker compose exec api python pipeline/analytics/gap_index.py
-docker compose exec api python pipeline/analytics/requirements.py
-docker compose exec api python pipeline/analytics/forecast.py
-docker compose exec api python pipeline/analytics/corridor_gaps.py
-docker compose exec api python pipeline/analytics/optimise_sites.py
-docker compose exec api python pipeline/analytics/validate.py
+# Edit .env — set your keys (see Configuration below)
 ```
 
-### Access
+### 2 — Start the App
 
-| Service | URL |
+```bash
+make up
+```
+
+### 3 — (First time only) Run the Data Pipeline
+
+```bash
+make pipeline
+```
+
+> ☕ Takes ~5 minutes. Fetches boundaries, chargers, registrations, roads, and runs all analytics.
+
+### 4 — Open in Browser
+
+| | URL |
 |---|---|
-| Web App | http://localhost:5173 |
-| API Docs | http://localhost:8000/docs |
-| Database | `localhost:5432` (user: `evuser`) |
+| 🌐 Web App | http://localhost:5173 |
+| 📖 API Docs | http://localhost:8000/docs |
+| 🐘 Database | `localhost:5432` · user: `evuser` |
 
 ---
 
-## Project Structure
+## 🛠️ Daily Commands
+
+```bash
+make up          # Start the app
+make stop        # Stop the app
+make logs        # Tail all service logs
+make shell-db    # Open a psql shell
+make test        # Run test suite
+make reset       # ⚠️  Wipe all data and start fresh
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 EV_Nirvana/
-├── api/                  # FastAPI application
-│   └── routers/          # Endpoint handlers (chargers, gaps, forecasts, ...)
-├── pipeline/
-│   ├── ingest/           # Data ingestion scripts
-│   ├── clean/            # Normalisation, deduplication, mapping
-│   └── analytics/        # Gap index, forecasting, optimisation, validation
-├── web/                  # React frontend (Vite)
-│   └── src/
-│       └── App.tsx       # Main application component
-├── db/                   # Database migrations and schema
-├── config/
-│   └── project.yaml      # State config, bounding box, CRS
-├── data/                 # Raw and processed data (gitignored)
-├── reports/              # Auto-generated pipeline reports
-├── docs/                 # Technical documentation
-├── tests/                # Unit and integration tests
+│
+├── 🌐 web/                    React + MapLibre GL frontend
+│   └── src/App.tsx            Main app component
+│
+├── ⚡ api/                    FastAPI application
+│   └── routers/               chargers · gaps · forecasts · sites · meta
+│
+├── 🔄 pipeline/
+│   ├── ingest/                Boundaries · OCM · VAHAN · Population · Roads
+│   ├── clean/                 Normalise · Dedup · RTO mapping
+│   └── analytics/             Gap index · Forecast · Corridor gaps · MCLP
+│
+├── 🐘 db/                     PostgreSQL init scripts & schema
+├── ⚙️  config/project.yaml    State, bounding box, CRS settings
+├── 📊 reports/                Auto-generated pipeline reports
+├── 🧪 tests/                  Unit and integration tests
+├── 📚 docs/                   Technical documentation
+│
 ├── docker-compose.yml
 ├── Makefile
-└── .env.example
+└── .env
 ```
 
 ---
 
-## Data Sources
+## 🗄️ Data Sources
 
 | Source | Data | Licence |
 |---|---|---|
-| OpenStreetMap | Charger locations, road network | ODbL |
-| Open Charge Map | Charger POIs, operator info | CC BY-SA |
-| GADM / Geohacker | Administrative boundaries | Academic use |
-| Overpass API | National Highway geometries | ODbL |
+| [Open Charge Map](https://openchargemap.org) | 1,840 charger POIs | CC BY-SA |
+| [OpenStreetMap](https://www.openstreetmap.org) | Road network, amenities | ODbL |
+| [VAHAN](https://vahan.parivahan.gov.in) | EV registration records | Govt. of India |
+| [GADM](https://gadm.org) | Administrative boundaries | Academic use |
+| [Overpass API](https://overpass-api.de) | National Highway geometries | ODbL |
 
 ---
 
-## API Reference
+## ⚙️ Configuration
 
-```
-GET /chargers          All charger locations (supports bbox, min_kw filters)
-GET /gaps              District-level Charging Gap Index scores
-GET /forecasts         EV registration forecasts by district and scenario
-GET /requirements      Charger requirement estimates per district
-GET /recommend         Optimised site recommendations (MCLP)
-GET /export/brief      Full data export (JSON)
-GET /meta/assumptions  Model assumptions and parameters
-```
-
-Full interactive docs at **http://localhost:8000/docs**.
-
----
-
-## Configuration
-
-Key settings in `.env`:
+**`.env`** — environment variables:
 
 ```bash
-DB_PASSWORD=your_password
-OCM_API_KEY=your_open_charge_map_key   # https://openchargemap.org/site/develop
-CARTO_API_KEY=your_carto_key           # https://carto.com
+DB_PASSWORD=your_db_password
+OCM_API_KEY=your_key        # https://openchargemap.org/site/develop
+CARTO_API_KEY=your_key      # https://carto.com/developers/basemaps
 ```
 
-State and geospatial config in `config/project.yaml`:
+**`config/project.yaml`** — geospatial settings:
 
 ```yaml
 state: Maharashtra
@@ -156,15 +180,41 @@ project_crs: EPSG:32643
 
 ---
 
-## Docs
+## 📐 Methodology
 
-- [Methodology](docs/METHODOLOGY.md) — CGI formula, data processing decisions
-- [Data Strategy](docs/DATA_STRATEGY.md) — Source selection and quality assessment
-- [Assumptions](docs/ASSUMPTIONS.md) — Model parameters and justifications
-- [Scalability Roadmap](docs/SCALABILITY_ROADMAP.md) — Path to national coverage
+The **Charging Gap Index (CGI)** is a weighted composite of:
+
+| Indicator | Default Weight |
+|---|---|
+| EVs per charger | 30% |
+| Population coverage | 25% |
+| Demand score | 20% |
+| Corridor gap | 15% |
+| Growth rate | 10% |
+
+Weights are user-adjustable via the **What-If Simulator** tab.
+
+> See [docs/METHODOLOGY.md](docs/METHODOLOGY.md) for full details.
 
 ---
 
-## License
+## 📚 Documentation
 
-MIT
+- [**Methodology**](docs/METHODOLOGY.md) — CGI formula, statistical model details
+- [**Data Strategy**](docs/DATA_STRATEGY.md) — Source selection and quality assessment
+- [**Assumptions**](docs/ASSUMPTIONS.md) — Model parameters and justifications
+- [**Scalability Roadmap**](docs/SCALABILITY_ROADMAP.md) — Path to pan-India coverage
+
+---
+
+## 📜 License
+
+MIT © EV_Nirvana Contributors
+
+---
+
+<div align="center">
+
+*Built with 🔋 to accelerate India's EV transition*
+
+</div>
